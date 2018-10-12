@@ -13,17 +13,22 @@ public class ClientMain {
         {
             Socket socket = new Socket("127.0.0.1", 3333);
 
-            String readName = null;
+            String username = null;
             Scanner scan = new Scanner(System.in);
+
             System.out.println("Please input username: " );
-            while (readName == null || readName.trim().equals("")){
-                readName = scan.nextLine();
-                if(readName.trim().equals("")){
+
+            while (username == null || username.trim().equals("")){
+                String attemptedUsername = scan.nextLine();
+                if (validator(attemptedUsername)){
+                    username = attemptedUsername;
+                }
+                if(username.trim().equals("")){
                     System.out.println("Invalid. Please enter again:");
                 }
             }
-            SendMessages sendMessages = new SendMessages(socket, readName);
-            RecieveMessages recieveMessages = new RecieveMessages(socket, readName);
+            SendMessages sendMessages = new SendMessages(socket, username);
+            RecieveMessages recieveMessages = new RecieveMessages(socket, username);
 
             Thread send = new Thread(sendMessages);
             Thread recieve = new Thread(recieveMessages);
@@ -36,6 +41,22 @@ public class ClientMain {
             System.out.println("Fatal Connection error");
         }
 
-        //TODO: Make a RegularExpression for Validation
     }
+
+    public static boolean validator(String attemptedUsername)
+    {
+        String regex = "[a-zA-Z-øæå+_]" ;
+        if(attemptedUsername.matches(regex))
+        {
+            if(attemptedUsername.length() > 1 && attemptedUsername.length() < 12 )
+            {
+                return true;
+            }
+
+
+        }
+        return false;
+    }
+
+
 }

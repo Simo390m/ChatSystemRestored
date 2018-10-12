@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class ChatServer
 {
     private static int portNumber = 3333;
-
+    private static boolean isAccepted;
     private static ArrayList<ClientThread> clients = new ArrayList<>();
+
 
     public static void main(String[] args)
     {
@@ -37,6 +38,11 @@ public class ChatServer
         {
             System.out.println("Could not listen on port: " +portNumber);
         }
+    }
+
+    public static ArrayList<ClientThread> getClients()
+    {
+        return clients;
     }
 
 }
