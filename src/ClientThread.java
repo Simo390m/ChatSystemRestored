@@ -1,18 +1,19 @@
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class ClientThread extends ChatServer implements Runnable
 {
     private Socket socket;
-    private ChatServer chatserver;
+    private ArrayList<ClientThread> clientThreads;
     private BufferedReader clientIn;
 
     private PrintWriter clientOut;
 
-    public ClientThread (ChatServer chatServer, Socket socket)
+    public ClientThread (ArrayList<ClientThread> clientThreads, Socket socket)
     {
+        this.clientThreads = clientThreads;
         this.socket = socket;
-        this.chatserver = chatServer;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ClientThread extends ChatServer implements Runnable
                 String input = clientIn.readLine();
                 if (input != null)
                 {
-                    for (ClientThread client : chatserver.getClients())
+                    for (ClientThread client : clientThreads)
                     {
                         PrintWriter clientOut = client.getClientOut();
                         if (clientOut != null)
