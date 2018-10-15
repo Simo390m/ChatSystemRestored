@@ -29,7 +29,7 @@ public class SendMessages implements Runnable {
                 if (scanner.hasNextLine())
                 {
                     sendMessage = scanner.nextLine();
-                    clientOut.println(sendMessage);
+                    clientOut.println(name + ": " + sendMessage);
                     clientOut.flush();
                 }
             }

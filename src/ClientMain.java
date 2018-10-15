@@ -13,13 +13,14 @@ public class ClientMain {
         {
             Socket socket = new Socket("127.0.0.1", 3333);
 
+            String attemptedUsername;
             String username = null;
             Scanner scan = new Scanner(System.in);
 
             System.out.println("Please input username: " );
 
             while (username == null || username.trim().equals("")){
-                String attemptedUsername = scan.nextLine();
+                 attemptedUsername = scan.nextLine();
                 if (validator(attemptedUsername)){
                     username = attemptedUsername;
                 }
@@ -45,8 +46,8 @@ public class ClientMain {
 
     public static boolean validator(String attemptedUsername)
     {
-        String regex = "[a-zA-Z-øæå+_]" ;
-        if(attemptedUsername.matches(regex))
+        String regex = "[a-zA-Z]+" ;
+        if(attemptedUsername.matches(regex));
         {
             if(attemptedUsername.length() > 1 && attemptedUsername.length() < 12 )
             {
