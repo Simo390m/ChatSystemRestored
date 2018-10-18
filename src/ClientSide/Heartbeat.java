@@ -1,3 +1,5 @@
+package ClientSide;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -6,7 +8,7 @@ public class Heartbeat extends TimerTask {
     @Override
     public void run() {
         completeTask();
-        System.out.println("Hearbeat alive");
+        System.out.println("IMAV");
     }
 
     private void completeTask() {

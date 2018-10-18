@@ -1,3 +1,5 @@
+package ClientSide;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,10 +11,11 @@ public class RecieveMessages implements Runnable {
     String username;
     String recievedMessage;
     BufferedReader bufferedReader;
+    ThreadLock threadLock;
 
-    public RecieveMessages(Socket socket, String username) {
+    public RecieveMessages(Socket socket, ThreadLock threadLock) {
         this.socket = socket;
-        this.username = username;
+        this.threadLock = threadLock;
     }
 
     @Override

@@ -1,7 +1,8 @@
+package ServerSide;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-
 
 public class ChatServer
 {
@@ -21,7 +22,7 @@ public class ChatServer
                 try
                 {
                     Socket socket = serverSocket.accept();
-                    ClientThread client = new ClientThread(clients, socket);
+                    ClientThread client = new ClientThread(clients, socket, serverSocket);
                     Thread thread = new Thread (client);
                     thread.start();
                     clients.add(client);

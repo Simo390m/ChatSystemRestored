@@ -1,3 +1,7 @@
+package ClientSide;
+
+import ServerSide.ClientThread;
+
 import javax.sound.sampled.ReverbType;
 import java.io.IOException;
 import java.net.*;
@@ -6,6 +10,14 @@ import java.util.Scanner;
 
 public class ClientMain {
 
+
+
+    private static boolean isAccepted;
+    private SendMessages sendMessages;
+    private RecieveMessages recieveMessages;
+    private Socket socket;
+    private static ThreadLock threadLock;
+
     public static void main(String[] args)
 
     {
@@ -13,23 +25,8 @@ public class ClientMain {
         {
             Socket socket = new Socket("127.0.0.1", 3333);
 
-            String attemptedUsername;
-            String username = null;
-            Scanner scan = new Scanner(System.in);
-
-            System.out.println("Please input username: " );
-
-            while (username == null || username.trim().equals("")){
-                 attemptedUsername = scan.nextLine();
-                if (validator(attemptedUsername)){
-                    username = attemptedUsername;
-                }
-                if(username.trim().equals("")){
-                    System.out.println("Invalid. Please enter again:");
-                }
-            }
-            SendMessages sendMessages = new SendMessages(socket, username);
-            RecieveMessages recieveMessages = new RecieveMessages(socket, username);
+            SendMessages sendMessages = new SendMessages(socket, threadLock);
+            RecieveMessages recieveMessages = new RecieveMessages(socket, threadLock);
 
             Thread send = new Thread(sendMessages);
             Thread recieve = new Thread(recieveMessages);
@@ -43,7 +40,8 @@ public class ClientMain {
         }
 
     }
-
+    //ON THE MOVE
+/*
     public static boolean validator(String attemptedUsername)
     {
         String regex = "[a-zA-Z]+" ;
@@ -57,6 +55,22 @@ public class ClientMain {
 
         }
         return false;
+    }
+*/
+    public synchronized void closeConnection()
+    {
+
+
+    }
+
+    public synchronized static boolean getIsAccepted()
+    {
+        return isAccepted;
+    }
+
+    public synchronized static void changeIsAccepted(Boolean value)
+    {
+        isAccepted = value;
     }
 
 
