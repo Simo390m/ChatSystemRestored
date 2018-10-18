@@ -16,7 +16,7 @@ public class ClientMain {
     private Socket socket;
     private static SendMessages sendMessages;
     private static RecieveMessages recieveMessages;
-    private static Heartbeat heartbeat;
+    private static HeartBeat heartbeat;
     private static ThreadLock threadLock;
     private static Thread sendThread;
     private static Thread recieveThread;
@@ -32,7 +32,7 @@ public class ClientMain {
 
              sendMessages = new SendMessages(socket, threadLock);
              recieveMessages = new RecieveMessages(socket, threadLock);
-             heartbeat = new Heartbeat(sendMessages);
+             heartbeat = new HeartBeat(sendMessages);
 
             sendThread = new Thread(sendMessages);
             sendThread.start();

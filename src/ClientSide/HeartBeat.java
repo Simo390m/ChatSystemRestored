@@ -2,11 +2,11 @@ package ClientSide;
 
 
 
-public class Heartbeat implements Runnable
+public class HeartBeat implements Runnable
 {
     private SendMessages send;
 
-    public Heartbeat(SendMessages send)
+    public HeartBeat(SendMessages send)
     {
         this.send = send;
     }
@@ -22,7 +22,7 @@ public class Heartbeat implements Runnable
                 {
                     try
                     {
-                     wait(60*1000);
+                        wait(60*1000);
                     }
                     catch (InterruptedException e)
                     {
