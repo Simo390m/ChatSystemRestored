@@ -5,13 +5,12 @@ public class Heartbeat extends TimerTask {
 
     @Override
     public void run() {
-        completeTask();
+        heartbeat();
         System.out.println("Hearbeat alive");
     }
 
-    private void completeTask() {
+    private void heartbeat() {
         try {
-
             Thread.sleep(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -19,10 +18,10 @@ public class Heartbeat extends TimerTask {
     }
 
     public static void main(String args[]){
-        TimerTask heartbeat = new Heartbeat();
+        TimerTask hB = new Heartbeat();
         //running timer task as daemon thread
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(heartbeat, 0, 5*1000);
+        timer.scheduleAtFixedRate(hB, 0, 5*1000);
 
 
         try {
