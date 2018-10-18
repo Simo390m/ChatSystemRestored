@@ -13,26 +13,38 @@ public class ClientMain {
 
 
     private static boolean isAccepted;
-    private SendMessages sendMessages;
-    private RecieveMessages recieveMessages;
     private Socket socket;
+    private static SendMessages sendMessages;
+    private static RecieveMessages recieveMessages;
+    private static Heartbeat heartbeat;
     private static ThreadLock threadLock;
+    private static Thread sendThread;
+    private static Thread recieveThread;
+    private static Thread hearbeatThread;
 
     public static void main(String[] args)
 
     {
         try
         {
+            isAccepted = false;
             Socket socket = new Socket("127.0.0.1", 3333);
 
-            SendMessages sendMessages = new SendMessages(socket, threadLock);
-            RecieveMessages recieveMessages = new RecieveMessages(socket, threadLock);
+             sendMessages = new SendMessages(socket, threadLock);
+             recieveMessages = new RecieveMessages(socket, threadLock);
+             heartbeat = new Heartbeat(sendMessages);
 
-            Thread send = new Thread(sendMessages);
-            Thread recieve = new Thread(recieveMessages);
+            sendThread = new Thread(sendMessages);
+            sendThread.start();
 
-            send.start();
-            recieve.start();
+
+            recieveThread = new Thread(recieveMessages);
+            recieveThread.start();
+
+
+            hearbeatThread = new Thread (heartbeat);
+            hearbeatThread.start();
+
         }
         catch(IOException e)
         {
@@ -40,23 +52,7 @@ public class ClientMain {
         }
 
     }
-    //ON THE MOVE
-/*
-    public static boolean validator(String attemptedUsername)
-    {
-        String regex = "[a-zA-Z]+" ;
-        if(attemptedUsername.matches(regex));
-        {
-            if(attemptedUsername.length() > 1 && attemptedUsername.length() < 12 )
-            {
-                return true;
-            }
 
-
-        }
-        return false;
-    }
-*/
     public synchronized void closeConnection()
     {
 

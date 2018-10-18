@@ -29,6 +29,7 @@ public class SendMessages implements Runnable {
         try
         {
             clientOut = new PrintWriter(socket.getOutputStream(), true);
+            threadLock = new ThreadLock();
             scanner = new Scanner(System.in);
             String outputMessage;
 
@@ -39,6 +40,7 @@ public class SendMessages implements Runnable {
                     System.out.println("Indtast dit brugernavn: ");
                     String name = scanner.nextLine();
                     send("JOIN " + name + ", " + socket.getInetAddress().toString().substring(1) + ":" + socket.getPort());
+                    threadLock.await();
 
                 }
                 while (ClientMain.getIsAccepted())
@@ -62,11 +64,16 @@ public class SendMessages implements Runnable {
                 }
             }
         }
-        catch (IOException e)
+        catch (IOException e )
         {
             System.out.println("Du har mistet forbindelsen");
            // ClientMain.closeConnection();
         }
+        catch (InterruptedException interruptedException)
+        {
+            interruptedException.printStackTrace();
+        }
+
 
     }
     public synchronized void send (String message)

@@ -60,24 +60,25 @@ public class ClientThread extends ChatServer implements Runnable
                                     {
                                         if (clientThread.username == attemptedUsername && clientThread != this)
                                         {
-                                            sendMessages.send("J_ER1: Navnet du har skrevet er i brug");
+                                            send("J_ER1: Navnet du har skrevet er i brug");
                                             break;
                                         }
 
                                     }
                                     this.username = attemptedUsername;
                                     isAccepted = true;
-                                    sendMessages.send("J_OK");
+                                    send("J_OK");
                                 } else
                                 {
-                                    sendMessages.send("J_ER2 Fejl i Socket eller port");
+                                    send("J_ER2 Fejl i Socket eller port");
                                 }
                             } else
                             {
-                                sendMessages.send("J_ER3 Navnet du har skrevet er i et forkert Format");
+                                send("J_ER3 Navnet du har skrevet er i et forkert Format");
                             }
+                            break;
                         default:
-                            sendMessages.send("J_ER4 Du er ikke accepteret");
+                            send("J_ER4 Du er ikke accepteret");
                             break;
 
                     }
@@ -127,5 +128,9 @@ public class ClientThread extends ChatServer implements Runnable
     public PrintWriter getClientOut()
     {
         return clientOut;
+    }
+    public synchronized void send (String message)
+    {
+        clientOut.println(message);
     }
 }

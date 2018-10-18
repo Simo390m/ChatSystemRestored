@@ -10,7 +10,7 @@ public class RecieveMessages implements Runnable {
     Socket socket;
     String username;
     String recievedMessage;
-    BufferedReader bufferedReader;
+    BufferedReader input;
     ThreadLock threadLock;
 
     public RecieveMessages(Socket socket, ThreadLock threadLock) {
@@ -24,10 +24,36 @@ public class RecieveMessages implements Runnable {
     {
 
         try {
-            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while((recievedMessage = bufferedReader.readLine()) != null)
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            while((recievedMessage = input.readLine()) != null)
             {
-                System.out.println(recievedMessage);
+                switch (recievedMessage.substring(0,4))
+                {
+                    case "J_ER":
+                        String[] errorMessageArray;
+                        errorMessageArray = recievedMessage.split(":");
+                        System.out.println("Fejlbeksed type: " + errorMessageArray[0].split(" ")[1] + ": " + errorMessageArray[1]);
+                        threadLock.signal();
+                        break;
+
+                    case "J_OK":
+                        ClientMain.changeBool(true);
+                        threadLock.signal();
+                        System.out.println("Velkommen");
+                        System.out.println("For at forlade, skriv exit ");
+                        System.out.println("For at få en liste over alle brugere, skriv list");
+                        break;
+
+                    case "DATA":
+                        String [] messageFromUser = recievedMessage.split(":");
+                        if (messageFromUser[1]!= null )
+                        {
+                            System.out.println(messageFromUser );
+                        }
+
+
+                }
+
             }
         }
         catch (IOException e) {
