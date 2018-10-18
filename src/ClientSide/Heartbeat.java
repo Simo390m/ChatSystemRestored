@@ -1,37 +1,38 @@
 package ClientSide;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class Heartbeat extends TimerTask {
+
+public class Heartbeat implements Runnable
+{
+    private SendMessages send;
+
+    public Heartbeat(SendMessages send)
+    {
+        this.send = send;
+    }
 
     @Override
-    public void run() {
-        completeTask();
-        System.out.println("IMAV");
-    }
-
-    private void completeTask() {
-        try {
-
-            Thread.sleep(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public void run()
+    {
+        while (true)
+        {
+            while(ClientMain.getBool())
+            {
+                synchronized (this)
+                {
+                    try
+                    {
+                     wait(60*1000);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                send.send("IMAV");
+            }
         }
+
+
     }
-
-    public static void main(String args[]){
-        TimerTask heartbeat = new Heartbeat();
-        //running timer task as daemon thread
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(heartbeat, 0, 5*1000);
-
-
-        try {
-            Thread.sleep(1000000000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

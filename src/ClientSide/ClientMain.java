@@ -74,4 +74,14 @@ public class ClientMain {
     }
 
 
+
+    public synchronized static void changeBool(Boolean value){
+        isAccepted = value;
+    }
+
+    public synchronized static boolean getBool(){
+        return isAccepted;
+    }
+
+
 }
