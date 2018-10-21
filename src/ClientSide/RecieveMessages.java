@@ -7,11 +7,11 @@ import java.net.Socket;
 
 public class RecieveMessages implements Runnable {
 
-    Socket socket;
-    String username;
-    String recievedMessage;
-    BufferedReader input;
-    ThreadLock threadLock;
+    private Socket socket;
+    private String username;
+    private String recievedMessage;
+    private BufferedReader input;
+    private ThreadLock threadLock;
 
     public RecieveMessages(Socket socket, ThreadLock threadLock) {
         this.socket = socket;

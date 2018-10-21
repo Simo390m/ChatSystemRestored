@@ -30,6 +30,7 @@ public class ClientMain {
             isAccepted = false;
             Socket socket = new Socket("127.0.0.1", 3333);
 
+             threadLock = new ThreadLock();
              sendMessages = new SendMessages(socket, threadLock);
              recieveMessages = new RecieveMessages(socket, threadLock);
              heartbeat = new HeartBeat(sendMessages);
@@ -42,8 +43,9 @@ public class ClientMain {
             recieveThread.start();
 
 
-            hearbeatThread = new Thread (heartbeat);
+           /* hearbeatThread = new Thread (heartbeat);
             hearbeatThread.start();
+            */
 
         }
         catch(IOException e)

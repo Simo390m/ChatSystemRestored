@@ -30,7 +30,6 @@ public class ChatServer
                     thread.start();
                     clients.add(clientThread);
                     System.out.println("Client tilføjet");
-                    System.out.println(clients.get(0));
                 }
                 catch (IOException e)
                 {

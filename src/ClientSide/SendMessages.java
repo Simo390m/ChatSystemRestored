@@ -45,6 +45,7 @@ public class SendMessages implements Runnable {
                 }
                 while (ClientMain.getIsAccepted())
                 {
+                    System.out.println("SKRIV NOGET NU");
                     outputMessage = scanner.nextLine();
                     switch (outputMessage)
                     {
