@@ -1,6 +1,7 @@
 package ClientSide;
 
 import ClientSide.ClientMain;
+import ServerSide.ClientThread;
 import com.sun.tools.javac.Main;
 
 import java.io.IOException;
@@ -13,23 +14,21 @@ public class SendMessages implements Runnable {
      Socket socket;
      String name;
      Scanner scanner;
-     String sendMessage;
      PrintWriter clientOut;
-     private ThreadLock threadLock;
+     ThreadLock threadLock;
 
 
-    public SendMessages(Socket socket, ThreadLock threadLock) {
+    public SendMessages(Socket socket)
+    {
         this.socket = socket;
-        this.threadLock = threadLock;
     }
 
     @Override
-    public void run()
+    public synchronized void run()
     {
         try
         {
             clientOut = new PrintWriter(socket.getOutputStream(), true);
-            threadLock = new ThreadLock();
             scanner = new Scanner(System.in);
             String outputMessage;
 
@@ -37,10 +36,18 @@ public class SendMessages implements Runnable {
             {
                 while(!ClientMain.getIsAccepted())
                 {
-                    System.out.println("Indtast dit brugernavn: ");
-                    String name = scanner.nextLine();
-                    send("JOIN " + name + ", " + socket.getInetAddress().toString().substring(1) + ":" + socket.getPort());
-                    threadLock.await();
+                        System.out.println("Indtast dit brugernavn: ");
+                        String name = scanner.nextLine();
+                        send("JOIN " + name + ", " + socket.getInetAddress().toString().substring(1) + ":" + socket.getPort());
+
+                        try
+                        {
+                            wait();
+                        }
+                    catch (InterruptedException interruptedException)
+                    {
+                        interruptedException.printStackTrace();
+                    }
 
                 }
                 while (ClientMain.getIsAccepted())
@@ -51,7 +58,7 @@ public class SendMessages implements Runnable {
                     {
                         case "exit":
                             send("EXIT");
-                            System.out.println("Farvel" + name + " du har logget ud");
+                            System.out.println("Farvel " + name + " du har logget ud");
                             break;
 
                         case "list":
@@ -70,15 +77,16 @@ public class SendMessages implements Runnable {
             System.out.println("Du har mistet forbindelsen");
            // ClientMain.closeConnection();
         }
-        catch (InterruptedException interruptedException)
-        {
-            interruptedException.printStackTrace();
-        }
-
-
     }
+
     public synchronized void send (String message)
     {
         clientOut.println(message);
+    }
+
+    public void resumeThread() {
+        synchronized(this) {
+            this.notify();
+        }
     }
 }

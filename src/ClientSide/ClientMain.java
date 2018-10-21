@@ -14,13 +14,16 @@ public class ClientMain {
 
     private static boolean isAccepted;
     private Socket socket;
-    private static SendMessages sendMessages;
     private static RecieveMessages recieveMessages;
+    static SendMessages sendMessages;
     private static HeartBeat heartbeat;
     private static ThreadLock threadLock;
-    private static Thread sendThread;
+    static Thread sendThread;
     private static Thread recieveThread;
     private static Thread hearbeatThread;
+
+
+
 
     public static void main(String[] args)
 
@@ -31,8 +34,8 @@ public class ClientMain {
             Socket socket = new Socket("127.0.0.1", 3333);
 
              threadLock = new ThreadLock();
-             sendMessages = new SendMessages(socket, threadLock);
-             recieveMessages = new RecieveMessages(socket, threadLock);
+             sendMessages = new SendMessages(socket);
+             recieveMessages = new RecieveMessages(socket);
              heartbeat = new HeartBeat(sendMessages);
 
             sendThread = new Thread(sendMessages);

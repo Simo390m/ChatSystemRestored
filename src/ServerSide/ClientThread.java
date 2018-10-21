@@ -15,6 +15,9 @@ public class ClientThread extends ChatServer implements Runnable
     private PrintWriter clientOut;
     private boolean isAccepted = false;
     private String input;
+
+
+
     private String username;
     private SendMessages sendMessages;
 
@@ -26,7 +29,7 @@ public class ClientThread extends ChatServer implements Runnable
     }
 
     @Override
-    public void run()
+    public synchronized void run()
     {
 
         try
@@ -58,7 +61,7 @@ public class ClientThread extends ChatServer implements Runnable
                                 {
                                     for (ClientThread clientThread : ChatServer.getClients())
                                     {
-                                        if (clientThread.username == attemptedUsername && clientThread != this)
+                                        if (clientThread.getUsername() == attemptedUsername && clientThread != this)
                                         {
                                             send("J_ER1: Navnet du har skrevet er i brug");
                                             break;
@@ -68,6 +71,7 @@ public class ClientThread extends ChatServer implements Runnable
                                     this.username = attemptedUsername;
                                     isAccepted = true;
                                     send("J_OK");
+                                    System.out.println("J_OK");
                                 } else
                                 {
                                     send("J_ER2 Fejl i Socket eller port");
@@ -133,4 +137,9 @@ public class ClientThread extends ChatServer implements Runnable
     {
         clientOut.println(message);
     }
+    public synchronized String getUsername()
+    {
+        return this.username;
+    }
+
 }

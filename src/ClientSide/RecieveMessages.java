@@ -1,5 +1,7 @@
 package ClientSide;
 
+import ServerSide.ClientThread;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,15 +13,15 @@ public class RecieveMessages implements Runnable {
     private String username;
     private String recievedMessage;
     private BufferedReader input;
-    private ThreadLock threadLock;
 
-    public RecieveMessages(Socket socket, ThreadLock threadLock) {
+
+    public RecieveMessages(Socket socket)
+    {
         this.socket = socket;
-        this.threadLock = threadLock;
     }
 
     @Override
-    public void run()
+    public synchronized void run()
 
     {
 
@@ -33,23 +35,36 @@ public class RecieveMessages implements Runnable {
                         String[] errorMessageArray;
                         errorMessageArray = recievedMessage.split(":");
                         System.out.println("Fejlbeksed type: " + errorMessageArray[0].split(" ")[1] + ": " + errorMessageArray[1]);
-                        threadLock.signal();
+                        ClientMain.sendMessages.resumeThread();
                         break;
 
                     case "J_OK":
                         ClientMain.changeBool(true);
-                        threadLock.signal();
+                        ClientMain.sendMessages.resumeThread();
                         System.out.println("Velkommen");
                         System.out.println("For at forlade, skriv exit ");
                         System.out.println("For at få en liste over alle brugere, skriv list");
                         break;
 
                     case "DATA":
-                        String [] messageFromUser = recievedMessage.split(":");
-                        if (messageFromUser[1]!= null )
+                        int index = this.findFirstSpace(recievedMessage);
+                        String messageFromUser = recievedMessage.substring(index);
+
+                        if (messageFromUser!= null )
                         {
-                            System.out.println(messageFromUser );
+                            System.out.println(username + " " + messageFromUser );
                         }
+                        break;
+
+                    case"LIST":
+                        String[] listOfUsers = recievedMessage.split(" ")[1].split(":");
+                        System.out.println("Folk i chatten");
+                        for (int i = 0; i < listOfUsers.length ; i++)
+                        {
+                            System.out.println(listOfUsers[i]);
+                        }
+                        break;
+
 
 
                 }
@@ -60,5 +75,13 @@ public class RecieveMessages implements Runnable {
             e.printStackTrace();
         }
 
+
+    }
+    private int findFirstSpace(String a) {
+        int i = 0;
+        while(a.charAt(i) != ' ') {
+            i++;
+        }
+        return i+1;
     }
 }
