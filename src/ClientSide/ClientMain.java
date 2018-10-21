@@ -1,6 +1,7 @@
 package ClientSide;
 
 import ServerSide.ClientThread;
+import jdk.dynalink.beans.StaticClass;
 
 import javax.sound.sampled.ReverbType;
 import java.io.IOException;
@@ -13,8 +14,8 @@ public class ClientMain {
 
 
     private static boolean isAccepted;
-    private Socket socket;
-    private static RecieveMessages recieveMessages;
+    static Socket socket;
+    static RecieveMessages recieveMessages;
     static SendMessages sendMessages;
     private static HeartBeat heartbeat;
     private static ThreadLock threadLock;
@@ -53,14 +54,23 @@ public class ClientMain {
         }
         catch(IOException e)
         {
+            if (!socket.isClosed())
             System.out.println("Fatal Connection error");
+            closeConnection();
         }
 
     }
 
-    public synchronized void closeConnection()
+    public synchronized static void closeConnection()
     {
+        try {
+            socket.close();
+            sendMessages.closeOut();
+            recieveMessages.closeIn();
+            changeBool(false);
+        }catch (IOException e){
 
+        }
 
     }
 

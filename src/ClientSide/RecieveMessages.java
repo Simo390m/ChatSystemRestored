@@ -83,5 +83,13 @@ public class RecieveMessages implements Runnable {
             i++;
         }
         return i+1;
+
+    }
+    public synchronized void closeIn() {
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

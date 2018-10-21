@@ -89,4 +89,7 @@ public class SendMessages implements Runnable {
             this.notify();
         }
     }
+    public synchronized void closeOut(){
+        clientOut.close();
+    }
 }
