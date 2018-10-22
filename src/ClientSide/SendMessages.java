@@ -1,9 +1,5 @@
 package ClientSide;
 
-import ClientSide.ClientMain;
-import ServerSide.ClientThread;
-import com.sun.tools.javac.Main;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -12,10 +8,10 @@ import java.util.Scanner;
 public class SendMessages implements Runnable {
 
      Socket socket;
-     String name;
+     String username;
      Scanner scanner;
      PrintWriter clientOut;
-     ThreadLock threadLock;
+
 
 
     public SendMessages(Socket socket)
@@ -58,7 +54,7 @@ public class SendMessages implements Runnable {
                     {
                         case "exit":
                             send("EXIT");
-                            System.out.println("Farvel " + name + " du har logget ud");
+                            System.out.println("Farvel " + username + " du har logget ud");
                             break;
 
                         case "list":
@@ -66,7 +62,7 @@ public class SendMessages implements Runnable {
                             break;
 
                         default:
-                            send("DATA" + name + ": " + outputMessage);
+                            send("DATA" + username + ": " + outputMessage);
                             break;
                     }
                 }

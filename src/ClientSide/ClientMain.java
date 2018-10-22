@@ -18,7 +18,6 @@ public class ClientMain {
     static RecieveMessages recieveMessages;
     static SendMessages sendMessages;
     private static HeartBeat heartbeat;
-    private static ThreadLock threadLock;
     static Thread sendThread;
     private static Thread recieveThread;
     private static Thread hearbeatThread;
@@ -34,7 +33,7 @@ public class ClientMain {
             isAccepted = false;
             Socket socket = new Socket("127.0.0.1", 3333);
 
-             threadLock = new ThreadLock();
+
              sendMessages = new SendMessages(socket);
              recieveMessages = new RecieveMessages(socket);
              heartbeat = new HeartBeat(sendMessages);
